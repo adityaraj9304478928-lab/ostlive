@@ -18,169 +18,195 @@ body{
   radial-gradient(circle at 10% 0%,rgba(29,108,255,.18),transparent 30%),
   radial-gradient(circle at 90% 10%,rgba(255,210,28,.10),transparent 25%),var(--bg);
   color:var(--text);line-height:1.6;
+  overflow-x:hidden;cursor:none;
 }
 a{text-decoration:none;color:inherit}
 .container{width:min(1120px,92%);margin:auto}
 
-/* Animations Keyframes */
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(25px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+/* ===== FUTURISTIC BACKGROUND & CURSOR EFFECTS ===== */
+body::before{animation:aurora 10s ease-in-out infinite alternate}
+@keyframes aurora{0%{filter:hue-rotate(0deg);transform:scale(1)}100%{filter:hue-rotate(35deg);transform:scale(1.08)}}
 
-@keyframes float {
-  0% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
-  100% { transform: translateY(0px); }
+body::after{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;opacity:.15;
+  background-image:linear-gradient(rgba(255,210,28,.15) 1px,transparent 1px),linear-gradient(90deg,rgba(255,210,28,.15) 1px,transparent 1px);
+  background-size:48px 48px;animation:gridMove 8s linear infinite;
 }
+@keyframes gridMove{to{background-position:48px 48px}}
 
-@keyframes pulseGlow {
-  0% { box-shadow: 0 0 10px rgba(255, 210, 28, 0.2); }
-  50% { box-shadow: 0 0 25px rgba(255, 210, 28, 0.5); }
-  100% { box-shadow: 0 0 10px rgba(255, 210, 28, 0.2); }
-}
+#particles{position:fixed;inset:0;pointer-events:none;z-index:0}
+.particle{position:absolute;width:3px;height:3px;border-radius:50%;background:var(--gold);box-shadow:0 0 12px var(--gold);animation:floatParticle linear infinite}
+@keyframes floatParticle{0%{transform:translateY(110vh) translateX(0);opacity:0}15%{opacity:1}100%{transform:translateY(-10vh) translateX(70px);opacity:0}}
 
-@keyframes heartBeat {
-  0% { transform: scale(1); }
-  14% { transform: scale(1.3); }
-  28% { transform: scale(1); }
-  42% { transform: scale(1.3); }
-  70% { transform: scale(1); }
-}
+#cursorGlow{position:fixed;width:180px;height:180px;border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(255,210,28,.18),transparent 65%);mix-blend-mode:screen}
+#cursorDot{position:fixed;width:7px;height:7px;border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);background:white;box-shadow:0 0 15px var(--gold)}
 
+/* ===== INTRO SCREEN ===== */
+.intro-screen{position:fixed;inset:0;background:#03060b;z-index:9990;display:flex;align-items:center;justify-content:center;flex-direction:column;transition:opacity 1s,visibility 1s}
+.intro-screen.hide{opacity:0;visibility:hidden}
+.intro-title{font-size:clamp(26px,6vw,65px);font-weight:900;color:var(--gold);text-align:center;text-shadow:0 0 12px var(--gold),0 0 35px rgba(255,210,28,.45);animation:introPulse 2s ease-in-out infinite}
+.intro-title span{color:#fff}
+.intro-line{height:2px;background:var(--gold);box-shadow:0 0 15px var(--gold);margin-top:22px;width:min(500px,80%);animation:introLine 2.4s ease}
+@keyframes introPulse{50%{transform:scale(1.035);opacity:1}}
+@keyframes introLine{from{width:0}to{width:min(500px,80%)}}
+
+/* ===== LOADER SCREEN ===== */
+#loader{position:fixed;inset:0;background:rgba(3,6,11,.97);backdrop-filter:blur(12px);z-index:5000;display:none;align-items:center;justify-content:center;flex-direction:column}
+.loader-title{font-size:clamp(22px,5vw,42px);color:var(--gold);text-shadow:0 0 20px var(--gold);text-align:center}
+.loader-percent{font-size:60px;font-weight:900;margin:18px;color:var(--gold);text-shadow:0 0 20px var(--gold)}
+.loader-box{width:min(600px,80%);height:12px;border:1px solid var(--gold);border-radius:20px;overflow:hidden;box-shadow:0 0 20px rgba(255,210,28,.35)}
+.loader-bar{width:0;height:100%;background:var(--gold);box-shadow:0 0 20px var(--gold);transition:width .03s linear}
+.loader-status{margin-top:16px;color:#ffe578;font-size:12px;letter-spacing:2px;animation:statusBlink 1s infinite}
+@keyframes statusBlink{50%{opacity:.35}}
+
+/* ===== NAVIGATION ===== */
 nav{
   position:sticky;top:0;z-index:10;background:rgba(5,7,11,.82);
-  backdrop-filter:blur(14px);border-bottom:1px solid var(--line);
-  animation: fadeInUp 0.6s ease-out;
+  backdrop-filter:blur(14px);border-bottom:1px solid var(--line)
 }
 .navbar{height:72px;display:flex;align-items:center;justify-content:space-between}
-.logo{font-weight:900;letter-spacing:.5px;font-size:18px;transition: transform 0.3s ease;}
-.logo:hover{transform: scale(1.03);}
+.logo{font-weight:900;letter-spacing:.5px;font-size:18px}
 .logo span{color:var(--gold)}
 .navlinks{display:flex;gap:24px;color:#d7dce5;font-size:14px}
-.navlinks a{transition: color 0.3s ease, transform 0.3s ease;}
-.navlinks a:hover{color:var(--gold); transform: translateY(-2px);}
+.navlinks a:hover{color:var(--gold)}
+
+/* ===== BUTTONS & SHINE EFFECT ===== */
 .btn{
   display:inline-flex;align-items:center;justify-content:center;padding:12px 18px;
   border-radius:12px;font-weight:800;background:linear-gradient(135deg,var(--gold),var(--gold2));
   color:#090b0f;box-shadow:0 10px 30px rgba(255,185,0,.18);
-  transition: all 0.3s ease;
+  position:relative;overflow:hidden;transition:.3s;
 }
-.btn:hover{
-  transform: translateY(-3px) scale(1.02);
-  box-shadow:0 15px 35px rgba(255,185,0,.35);
-}
+.btn:hover{transform:translateY(-2px) scale(1.03);box-shadow:0 0 28px rgba(255,210,28,.55)}
+.btn::after{content:"";position:absolute;top:0;left:-120%;width:60%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.35),transparent);transform:skewX(-20deg);transition:.6s}
+.btn:hover::after{left:140%}
 
 .hero{padding:72px 0 55px}
 .hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:42px;align-items:center}
-.hero-content { animation: fadeInUp 0.8s ease-out; }
 .badge{
   display:inline-block;padding:7px 12px;border:1px solid rgba(255,210,28,.35);
   border-radius:999px;color:var(--gold);background:rgba(255,210,28,.07);font-size:13px;font-weight:800;
-  animation: pulseGlow 3s infinite ease-in-out;
+  animation:badgePulse 2s infinite;
 }
-h1{font-size:clamp(42px,7vw,76px);line-height:.98;margin:18px 0}
+@keyframes badgePulse{50%{box-shadow:0 0 20px rgba(255,210,28,.35)}}
+
+h1{font-size:clamp(42px,7vw,76px);line-height:.98;margin:18px 0;animation:heroFloat 3s ease-in-out infinite}
+@keyframes heroFloat{50%{transform:translateY(-7px)}}
 h1 span{color:var(--gold)}
 .hero p{color:var(--muted);max-width:620px;font-size:17px}
 .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:25px}
-.secondary{border:1px solid var(--line);background:#111721;color:white; transition: all 0.3s ease;}
-.secondary:hover{ border-color: var(--gold); color: var(--gold); background:#172030; }
+.secondary{border:1px solid var(--line);background:#111721;color:white}
 
+.typing-cursor{border-right:2px solid var(--gold);animation:blinkCursor .7s step-end infinite}
+@keyframes blinkCursor{50%{border-color:transparent}}
+
+/* ===== POSTER & CARDS ===== */
 .poster{
   background:linear-gradient(145deg,#111827,#07090d);padding:12px;border-radius:22px;
   border:1px solid var(--line);box-shadow:0 25px 70px rgba(0,0,0,.5);
-  animation: float 4s infinite ease-in-out, fadeInUp 1s ease-out;
+  animation:cardFloat 4s ease-in-out infinite;position:relative;overflow:hidden;
 }
+@keyframes cardFloat{50%{transform:translateY(-8px)}}
 .poster img{width:100%;display:block;border-radius:14px;max-height:650px;object-fit:cover}
+
+.scanline{position:absolute;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);box-shadow:0 0 12px var(--gold);animation:scanLine 3s linear infinite;opacity:.55}
+@keyframes scanLine{from{top:0}to{top:100%}}
 
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:40px}
 .stat,.card{background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--line);border-radius:18px}
-.stat{padding:18px;text-align:center; transition: transform 0.3s ease, border-color 0.3s ease;}
-.stat:hover{ transform: translateY(-4px); border-color: rgba(255,210,28,.4); }
+.stat{padding:18px;text-align:center;transition:.3s;position:relative;overflow:hidden}
+.stat:hover{transform:translateY(-5px);border-color:var(--gold);box-shadow:0 0 20px rgba(255,210,28,.2)}
 .stat b{font-size:22px;color:var(--gold);display:block}.stat small{color:var(--muted)}
 
 section{padding:70px 0}
-.section-head{margin-bottom:30px; animation: fadeInUp 0.8s ease-out;}.section-head h2{font-size:34px}.section-head p{color:var(--muted)}
+.section-head{margin-bottom:30px}.section-head h2{font-size:34px}.section-head p{color:var(--muted)}
 .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-.card{
-  padding:22px;transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-.card:hover{
-  transform:translateY(-8px) scale(1.02);
-  border-color:rgba(255,210,28,.5);
-  box-shadow: 0 15px 30px rgba(0,0,0,0.4);
-}
-.icon{font-size:30px;margin-bottom:10px; transition: transform 0.3s ease;}
-.card:hover .icon{ transform: scale(1.2) rotate(5deg); }
-.card h3{margin-bottom:7px}.card p{color:var(--muted);font-size:14px}
+
+.card,.feature{position:relative;overflow:hidden;transition:transform .18s ease,box-shadow .3s,border-color .3s}
+.card::before,.feature::before,.poster::before{content:"";position:absolute;left:-120%;top:0;width:55%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,210,28,.12),transparent);transform:skewX(-20deg);transition:.7s}
+.card:hover::before,.feature:hover::before,.poster:hover::before{left:140%}
+
+.card{padding:22px}
+.card:hover,.feature:hover{transform:translateY(-6px);border-color:rgba(255,210,28,.4);box-shadow:0 0 22px rgba(255,210,28,.18)}
+.icon{font-size:30px;margin-bottom:10px}.card h3{margin-bottom:7px}.card p{color:var(--muted);font-size:14px}
 .course-tag{display:inline-block;color:var(--gold);font-size:12px;font-weight:900;margin-bottom:10px}
 
 .features{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.feature{
-  padding:25px;background:#0a0e15;border:1px solid var(--line);border-radius:18px;
-  transition: all 0.3s ease;
-}
-.feature:hover{ transform: translateY(-5px); border-color: rgba(29,108,255,.4); background: #0e141f; }
+.feature{padding:25px;background:#0a0e15;border:1px solid var(--line);border-radius:18px}
 .feature b{display:block;font-size:17px;margin-bottom:5px}.feature span{color:var(--muted);font-size:14px}
 
 .contact{
   background:linear-gradient(135deg,rgba(255,210,28,.12),rgba(29,108,255,.09));
-  border:1px solid var(--line);border-radius:25px;padding:35px;
-  transition: border-color 0.3s ease;
+  border:1px solid var(--line);border-radius:25px;padding:35px
 }
-.contact:hover{ border-color: rgba(255,210,28,.4); }
 .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
 .contact-item{padding:18px;border-radius:15px;background:rgba(0,0,0,.25);border:1px solid var(--line)}
 .contact-item small{color:var(--muted);display:block}.contact-item b{display:block;margin-top:3px}
 
+.reveal{opacity:0;transform:translateY(45px);transition:opacity .9s ease,transform .9s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+.holo{position:relative}
+.holo::after{content:"SYSTEM ONLINE";position:absolute;top:10px;right:12px;color:var(--gold);font-size:9px;letter-spacing:1px;opacity:.75}
+
 footer{
-  border-top:1px solid var(--line);padding:25px 0;color:var(--muted);text-align:center;font-size:13px;
-  line-height: 1.8;
+  border-top:1px solid var(--line);padding:25px 0;color:var(--muted);text-align:center;font-size:13px;line-height:1.8;
 }
-.heart-symbol {
-  display: inline-block;
-  color: #ff3b30;
-  animation: heartBeat 1.5s infinite;
-  margin: 0 3px;
-  font-size: 15px;
-}
-.by-aditya {
-  margin-top: 6px;
-  font-weight: 600;
-  color: #d7dce5;
-  letter-spacing: 0.5px;
-}
+.heart-symbol {display:inline-block;color:#ff3b30;animation:heartBeat 1.5s infinite;margin:0 3px;font-size:15px;}
+@keyframes heartBeat{0%,28%,70%,100%{transform:scale(1)}14%,42%{transform:scale(1.3)}}
+.by-aditya {margin-top:6px;font-weight:600;color:#d7dce5;letter-spacing:0.5px;}
 
 @media(max-width:850px){
   .navlinks{display:none}.hero-grid,.contact-grid{grid-template-columns:1fr}
   .grid{grid-template-columns:repeat(2,1fr)}.features{grid-template-columns:1fr 1fr}
 }
 @media(max-width:520px){
+  body{cursor:auto}#cursorGlow,#cursorDot{display:none}
   .hero{padding-top:45px}.stats{grid-template-columns:1fr 1fr}
   .grid,.features{grid-template-columns:1fr}section{padding:50px 0}
 }
 </style>
 </head>
 <body>
+
+<div id="particles"></div>
+<div id="cursorGlow"></div>
+<div id="cursorDot"></div>
+
+<!-- INTRO SCREEN -->
+<div class="intro-screen" id="introScreen">
+  <div class="intro-title">WELCOME TO <span>OM SAI TUTORIAL SHEOHAR</span></div>
+  <div class="intro-line"></div>
+</div>
+
+<!-- LOADER SCREEN -->
+<div id="loader">
+  <div class="loader-title">INITIALIZING OST SYSTEM</div>
+  <div class="loader-percent" id="loaderPercent">0%</div>
+  <div class="loader-box"><div class="loader-bar" id="loaderBar"></div></div>
+  <div class="loader-status" id="loaderStatus">CONNECTING TO COACHING SYSTEM...</div>
+</div>
+
 <nav>
   <div class="container navbar">
     <div class="logo">OM SAI <span>TUTORIAL</span> SHEOHAR</div>
     <div class="navlinks">
       <a href="#courses">Courses</a><a href="#why">Why Us</a><a href="#contact">Contact</a>
     </div>
-    <a class="btn" href="tel:+919507054224">Call Now</a>
+    <a class="btn loader-link" href="tel:+919507054224">Call Now</a>
   </div>
 </nav>
 
-<header class="hero">
+<header class="hero reveal" id="home">
   <div class="container hero-grid">
-    <div class="hero-content">
+    <div>
       <span class="badge">ADMISSIONS OPEN • 2026–27</span>
       <h1>OST <span>COACHING</span><br>Sheohar</h1>
+      <div class="typing-cursor" id="typingText" style="display:inline-block;color:var(--gold);font-weight:800;margin-top:10px;min-height:28px"></div>
       <p>Your Success, Our Mission. Focused academic and competitive-exam preparation for students from Class 6 to 12, plus NEET and JEE foundation programs.</p>
       <div class="actions">
-        <a class="btn" href="tel:+919507054224">📞 Enquire Now</a>
-        <a class="btn secondary" href="#courses">Explore Courses</a>
+        <a class="btn loader-link" href="tel:+919507054224">📞 Enquire Now</a>
+        <a class="btn secondary loader-link" href="#courses">Explore Courses</a>
       </div>
       <div class="stats">
         <div class="stat"><b>NEET</b><small>Foundation & Target</small></div>
@@ -189,37 +215,37 @@ footer{
         <div class="stat"><b>11–12</b><small>Science (PCM/PCB)</small></div>
       </div>
     </div>
-    <div class="poster"><img src="poster.jpg" alt="OM SAI TUTORIAL SHEOHAR admission poster"></div>
+    <div class="poster holo"><div class="scanline"></div><img src="poster.jpg" alt="OM SAI TUTORIAL SHEOHAR admission poster"></div>
   </div>
 </header>
 
-<section id="courses">
+<section id="courses" class="reveal">
 <div class="container">
   <div class="section-head"><h2>Courses Offered</h2><p>Board + competitive preparation under one roof.</p></div>
   <div class="grid">
-    <div class="card"><span class="course-tag">01 • NEET</span><div class="icon">🩺</div><h3>NEET Foundation & Target</h3><p>Build strong concepts for your medical career with focused preparation.</p></div>
-    <div class="card"><span class="course-tag">02 • JEE</span><div class="icon">⚙️</div><h3>JEE Main & Advanced</h3><p>Strong concepts, problem solving and a bright future.</p></div>
-    <div class="card"><span class="course-tag">03 • CLASS 11 & 12</span><div class="icon">📚</div><h3>Science — PCM / PCB</h3><p>Board preparation combined with competitive-exam support.</p></div>
-    <div class="card"><span class="course-tag">04 • CLASS 6–10</span><div class="icon">✏️</div><h3>All Subjects</h3><p>Strong foundation today for better performance tomorrow.</p></div>
+    <div class="card tilt"><div class="scanline"></div><span class="course-tag">01 • NEET</span><div class="icon">🩺</div><h3>NEET Foundation & Target</h3><p>Build strong concepts for your medical career with focused preparation.</p></div>
+    <div class="card tilt"><div class="scanline"></div><span class="course-tag">02 • JEE</span><div class="icon">⚙️</div><h3>JEE Main & Advanced</h3><p>Strong concepts, problem solving and a bright future.</p></div>
+    <div class="card tilt"><div class="scanline"></div><span class="course-tag">03 • CLASS 11 & 12</span><div class="icon">📚</div><h3>Science — PCM / PCB</h3><p>Board preparation combined with competitive-exam support.</p></div>
+    <div class="card tilt"><div class="scanline"></div><span class="course-tag">04 • CLASS 6–10</span><div class="icon">✏️</div><h3>All Subjects</h3><p>Strong foundation today for better performance tomorrow.</p></div>
   </div>
 </div>
 </section>
 
-<section id="why">
+<section id="why" class="reveal">
 <div class="container">
   <div class="section-head"><h2>Why Choose OST Coaching?</h2><p>Simple, consistent and student-focused learning.</p></div>
   <div class="features">
-    <div class="feature"><b>👨‍🏫 Experienced Faculty</b><span>Guidance focused on understanding concepts clearly.</span></div>
-    <div class="feature"><b>📝 Daily Practice Sheets (DPP)</b><span>Regular practice to keep learning consistent.</span></div>
-    <div class="feature"><b>📈 Weekly Tests & Reports</b><span>Track progress and identify areas to improve.</span></div>
-    <div class="feature"><b>👥 Small Batch Size</b><span>A learning environment designed for better attention.</span></div>
-    <div class="feature"><b>💬 Personal Doubt Sessions</b><span>Dedicated support when students need clarification.</span></div>
-    <div class="feature"><b>₹ Affordable Fee Structure</b><span>Quality coaching with a student-friendly approach.</span></div>
+    <div class="feature tilt"><div class="scanline"></div><b>👨‍🏫 Experienced Faculty</b><span>Guidance focused on understanding concepts clearly.</span></div>
+    <div class="feature tilt"><div class="scanline"></div><b>📝 Daily Practice Sheets (DPP)</b><span>Regular practice to keep learning consistent.</span></div>
+    <div class="feature tilt"><div class="scanline"></div><b>📈 Weekly Tests & Reports</b><span>Track progress and identify areas to improve.</span></div>
+    <div class="feature tilt"><div class="scanline"></div><b>👥 Small Batch Size</b><span>A learning environment designed for better attention.</span></div>
+    <div class="feature tilt"><div class="scanline"></div><b>💬 Personal Doubt Sessions</b><span>Dedicated support when students need clarification.</span></div>
+    <div class="feature tilt"><div class="scanline"></div><b>₹ Affordable Fee Structure</b><span>Quality coaching with a student-friendly approach.</span></div>
   </div>
 </div>
 </section>
 
-<section>
+<section class="reveal">
 <div class="container">
   <div class="contact">
     <div class="section-head"><h2>Admissions Open 2026–27</h2><p>Limited seats available • Free demo classes & scholarship test for new students.</p></div>
@@ -227,7 +253,7 @@ footer{
       <div class="contact-item"><small>📍 ADDRESS</small><b>Flat No. 43, Mahindra Complex,<br>Near V-Mart, Sheohar</b></div>
       <div class="contact-item"><small>📞 CONTACT US</small><b><a href="tel:+919507054224">+91 95070 54224</a></b></div>
     </div>
-    <div class="actions"><a class="btn" href="tel:+919507054224">Book a Free Enquiry</a></div>
+    <div class="actions"><a class="btn loader-link" href="tel:+919507054224">Book a Free Enquiry</a></div>
   </div>
 </div>
 </section>
@@ -237,5 +263,116 @@ footer{
   © 2026 OM SAI TUTORIAL SHEOHAR. All rights reserved.<br>
   <div class="by-aditya">Made with <span class="heart-symbol">❤️</span> by Aditya</div>
 </footer>
+
+<script>
+/* Welcome Animation Screen */
+setTimeout(()=>document.getElementById("introScreen").classList.add("hide"),3200);
+
+/* Floating Particles */
+const particleBox=document.getElementById("particles");
+for(let i=0;i<65;i++){
+  const p=document.createElement("div");
+  p.className="particle";
+  p.style.left=Math.random()*100+"%";
+  p.style.animationDuration=(5+Math.random()*10)+"s";
+  p.style.animationDelay=(-Math.random()*12)+"s";
+  p.style.opacity=Math.random();
+  particleBox.appendChild(p);
+}
+
+/* Custom Glow & Dot Cursor Follower */
+const glow=document.getElementById("cursorGlow"), dot=document.getElementById("cursorDot");
+document.addEventListener("mousemove",e=>{
+  glow.style.left=e.clientX+"px"; glow.style.top=e.clientY+"px";
+  dot.style.left=e.clientX+"px"; dot.style.top=e.clientY+"px";
+});
+
+/* Hero Dynamic Typing Effect */
+const typingWords=["NEET • JEE MAIN & ADVANCED","CLASS 11 & 12 (PCM / PCB)","CLASS 6 TO 10 ALL SUBJECTS","YOUR SUCCESS, OUR MISSION"];
+let tw=0, tc=0, deleting=false;
+function typeHero(){
+  const el=document.getElementById("typingText"), word=typingWords[tw];
+  el.textContent=word.slice(0,tc);
+  if(!deleting){
+    tc++;
+    if(tc>word.length){deleting=true;setTimeout(typeHero,1000);return;}
+  }else{
+    tc--;
+    if(tc===0){deleting=false;tw=(tw+1)%typingWords.length;}
+  }
+  setTimeout(typeHero,deleting?45:85);
+}
+typeHero();
+
+/* Smooth Scroll Reveal */
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      entry.target.classList.add("visible");
+      entry.target.querySelectorAll(".card,.feature").forEach((el,i)=>{
+        setTimeout(()=>{el.style.opacity="1";el.style.transform="translateY(0)"},i*100);
+      });
+    }
+  });
+},{threshold:.12});
+document.querySelectorAll(".reveal").forEach(el=>observer.observe(el));
+
+/* 3D Tilt Cards Effect */
+document.querySelectorAll(".tilt").forEach(card=>{
+  card.addEventListener("mousemove",e=>{
+    if(window.innerWidth<700)return;
+    const r=card.getBoundingClientRect();
+    const x=e.clientX-r.left,y=e.clientY-r.top;
+    const rx=((y/r.height)-.5)*-10, ry=((x/r.width)-.5)*10;
+    card.style.transform=`perspective(700px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-6px) scale(1.02)`;
+  });
+  card.addEventListener("mouseleave",()=>card.style.transform="");
+});
+
+/* Animated 0-100% System Loader */
+function startLoader(target){
+  const loader=document.getElementById("loader");
+  const percent=document.getElementById("loaderPercent");
+  const bar=document.getElementById("loaderBar");
+  const status=document.getElementById("loaderStatus");
+  loader.style.display="flex";
+  let value=0;
+  const messages=[
+    "CONNECTING TO COACHING SYSTEM...",
+    "LOADING NEET & JEE COURSES...",
+    "INITIALIZING BATCH SCHEDULE...",
+    "PREPARING STUDY MATERIAL...",
+    "OST SYSTEM ONLINE!"
+  ];
+  const timer=setInterval(()=>{
+    value++;
+    percent.textContent=value+"%";
+    bar.style.width=value+"%";
+    if(value%20===0)status.textContent=messages[Math.min(Math.floor(value/20),messages.length-1)];
+    if(value>=100){
+      clearInterval(timer);
+      setTimeout(()=>{
+        loader.style.display="none";
+        if(target.startsWith("#")) {
+          document.querySelector(target)?.scrollIntoView({behavior:"smooth"});
+        } else {
+          window.location.href = target;
+        }
+      },550);
+    }
+  },20);
+}
+
+document.querySelectorAll(".loader-link").forEach(link=>{
+  link.addEventListener("click",e=>{
+    const href = link.getAttribute("href");
+    if(href && href.startsWith("#")){
+      e.preventDefault();
+      startLoader(href);
+    }
+  });
+});
+</script>
+
 </body>
 </html>
